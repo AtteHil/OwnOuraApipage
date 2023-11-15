@@ -1,0 +1,8 @@
+extends layout
+
+block content
+  h1= title
+  p Insert your personal access token
+  input(type='text' id='PersonalToken')
+  button(id='submit-token' onclick='fetchApiData()') Find data
+  div(id='personalInfo')
