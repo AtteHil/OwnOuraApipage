@@ -40,7 +40,7 @@ router.get('/OuraData/sleep', function(req, res, next) {
   method: 'GET', 
   headers: myHeaders, 
   };
-  fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${dayBefore.toISOString().slice(0,10)}&end_date=${yesterday.toISOString().slice(0,10)}`, requestOptions) 
+  fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${yesterday.toISOString().slice(0,10)}&end_date=${today.toISOString().slice(0,10)}`, requestOptions) 
     .then(response => response.text()) 
     .then(result => {
       
