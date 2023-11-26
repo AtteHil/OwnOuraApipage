@@ -9,9 +9,11 @@ const fetchApiData =()=>{
         return response.json(); 
         })
         .then(data =>{
-            console.log(data.age);
-            PersonalInfoDiv(data);
-            fetchSleepData();
+            if (!data.status){
+                PersonalInfoDiv(data);
+                fetchSleepData();
+            }
+            
 
         })
     
@@ -30,6 +32,7 @@ const PersonalInfoDiv=(data)=>{
 
 }
 
+// get sleepdata from backend and put it for display to user
 const fetchSleepData = () =>{
     fetch(`/OuraData/sleep`)
     .then(response => {
@@ -38,10 +41,27 @@ const fetchSleepData = () =>{
         }
         return response.json(); 
         })
-        .then(data =>{
-            console.log(data);
-            
+    .then(data =>{
+        const latestSleep = data.data[data.data.length-1]
+        const sleepDiv = document.getElementById('sleepInfo');
+        
+        console.log(data);
+        sleepDiv.innerHTML = `
+        <p>Date: ${latestSleep.day}</p>
+        <p>Score: ${latestSleep.score}</p>
+        ${sleepContributors(latestSleep.contributors)}
+        `;
+    
+    })
+}
 
-        })
+const sleepContributors =(contributorsJson)=>{
+    let htmlElement= `` 
+    for(i in contributorsJson){
+        console.log(i, contributorsJson[i]);
+        htmlElement = htmlElement+`<p>${i}: ${contributorsJson[i]}</p>`
+    }
+    console.log(htmlElement);
+    return htmlElement
 }
 ;

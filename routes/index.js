@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var functions = require('../functions/functions.js');
 let personalToken = ''
 /* GET home page. */
 router.get('/', function(req, res, next) {
@@ -15,24 +16,21 @@ router.get('/info/:token', function(req, res, next) {
   headers: myHeaders, 
   };
   fetch('https://api.ouraring.com/v2/usercollection/personal_info', requestOptions) 
-    .then(response => response.text()) 
+    .then(response => response.json()) 
     .then(result => {
-      console.log(result)
-      res.send(result)}
-      ) 
+      if(result.message){
+        res.send({status: "Data was not found"});
+      }else{
+        res.send(result)}
+    }) 
     .catch(error => console.log('error', error));
 });
 // function to get sleepdata for last nights sleep
 // now it gets 2 nights ago sleep score. with id more data of the sleep could be get. Have to test if this works for the lasty night also. 
-//(Now my oura doesn't have stats for the last night)
+
 router.get('/OuraData/sleep', function(req, res, next) {
   
-  let today = new Date();
-  let yesterday = new Date(today.getTime() - 86400000)
-  let dayBefore = new Date(yesterday.getTime() -86400000)
-
-  
-  console.log(yesterday.toISOString().slice(0,10))
+  dates=functions.DateParser()
   
   var myHeaders = new Headers(); 
   myHeaders.append('Authorization', `Bearer ${personalToken}`); 
@@ -40,12 +38,23 @@ router.get('/OuraData/sleep', function(req, res, next) {
   method: 'GET', 
   headers: myHeaders, 
   };
-  fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${yesterday.toISOString().slice(0,10)}&end_date=${today.toISOString().slice(0,10)}`, requestOptions) 
-    .then(response => response.text()) 
+  fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${dates.monthAgo}&end_date=${dates.today}`, requestOptions) 
+    .then(response => response.json()) 
     .then(result => {
       
-      res.send(result)}
+      if(result.message){
+        res.send({status: "Data was not found"});
+      }else{
+        res.send(result)}
+      }
+      
       ) 
     .catch(error => console.log('error', error));
 });
+
+
+
+
+
+
 module.exports = router;
