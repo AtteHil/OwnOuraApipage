@@ -1,8 +1,25 @@
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+  background: #424242 !important; /*!important tag overwrites navbars body background-color*/
+}
+.navbar{
+  background-color: #0f8f0f;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4); /* box shadow for navbar*/
+}
+.navbar .dropdown-menu {
+  background-color: #0f8f0f; /* Set the background color for the dropdown menu */
 }
 
+.navbar .dropdown-item:hover {
+  background-color: #0c6e0c !important; /* Set the background color for the dropdown menu */
+  border-radius: 10px;
+}
+.navbar-nav .nav-link:hover {
+  background-color: #0c6e0c; 
+  border-radius: 15px;/* Set the background color on hover for the nav links */
+}
 a {
   color: #00B7FF;
 }
