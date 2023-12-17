@@ -9,25 +9,25 @@ block content
     .collapse.navbar-collapse#navbarSupportedContent
       ul.navbar-nav.mr-auto
         li.nav-item.active
-          a.nav-link(href='#') Info
+          a.nav-link(href='/') Info
             span.sr-only (current)
         //- li.nav-item
         //-   a.nav-link(href='#') Link
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href='#', id='navbarDropdown', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Different data
           .dropdown-menu(aria-labelledby='navbarDropdown')
-            a.dropdown-item(href='#') Sleep
+            a.dropdown-item(href='/sleep') Sleep
             a.dropdown-item(href='#') Activity
             //- .dropdown-divider
             a.dropdown-item(href='#') Readyness
         
 
       form.form-inline.my-2.my-lg-0
-        input.form-control.mr-sm-2(type='search', placeholder='Input your token', aria-label='Search')
-        button.btn.btn-outline-success.my-2.my-sm-0(type='submit') Find Data 
-  h1= title
-  p Insert your personal access token
-  input(type='text' id='PersonalToken')
-  button(id='submit-token' onclick='fetchApiData()') Find data
-  div(id='personalInfo' class='infoBox')
-  div(id='sleepInfo' class='infoBox')
+        input.form-control.mr-sm-2(type='search', id='PersonalToken', placeholder='Input your token', aria-label='Search')
+        button.btn.btn-outline-success.my-2.my-sm-0(type='button',id='submit-token' onclick='fetchApiData(false)') Find Data 
+  
+  
+  div(id= 'infoBoxes')
+    div(id='personalInfo' class='infoBox')
+    div(id='ringInfo' class='infoBox')
+  script(src='/javascripts/main.js')
