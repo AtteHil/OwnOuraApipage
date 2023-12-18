@@ -11,6 +11,11 @@ const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error"));
 db.on("connected", console.error.bind(console, "connect established"));
 
+// initializing schemas to null
+let sleepDataDB = null;
+let activityDataDB = null;
+let readinessDataDB = null;
+
 router.use(session({
   secret: 'MyOwnVerySecretKey123',
   resave: false,
@@ -18,10 +23,7 @@ router.use(session({
 
 }));
 
-//flexible schema to upload json objects straight from oura api to mongodb
-const FlexibleSchema = new mongoose.Schema({}, { strict: false });
-const sleepDataDB = mongoose.model('SleepData', FlexibleSchema);
-// let personalToken = ''
+
 /* GET home page. */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'OuraApi' });
@@ -33,8 +35,9 @@ router.get('/sleep', function (req, res, next) {
 
 router.get('/user', function (req, res, next) {
   const personalToken = req.session.token;
+  const id = req.session.user
   if (personalToken) {
-    res.json({ loggedIn: true, personalToken });
+    res.json({ loggedIn: true, personalToken, id });
   } else {
     res.json({ loggedIn: false });
   }
@@ -42,13 +45,14 @@ router.get('/user', function (req, res, next) {
 
 
 
-// get basic information aabotu the user and ring to send back to front.
+// get basic information about the user and ring to send back to front.
 router.get('/info/:token', async function (req, res, next) {
   dates = functions.DateParser()
 
   req.session.token = req.params.token;
   personalToken = req.session.token;
-  console.log(personalToken);
+
+  // console.log(personalToken);
   informationJson = {};
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${personalToken}`);
@@ -58,13 +62,14 @@ router.get('/info/:token', async function (req, res, next) {
   };
   const infoResponse = await fetch('https://api.ouraring.com/v2/usercollection/personal_info', requestOptions)
   if (!infoResponse.ok) {
-    throw new Error(` eka HTTP error! Status: ${infoResponse.status}`);
+    throw new Error(` HTTP error! Status: ${infoResponse.status}`);
   }
   const result = await infoResponse.json();
   if (result.message) {
     res.send({ status: "Data was not found" });
     c
   } else {
+    req.session.user = result.id
     informationJson.information = result;
     // res.send(result)
   }
@@ -75,7 +80,7 @@ router.get('/info/:token', async function (req, res, next) {
     const ringResponse = await fetch(`https://api.ouraring.com/v2/usercollection/ring_configuration?start_date=${dates.monthAgo}&end_date=${dates.today}`, requestOptions);
 
     if (!ringResponse.ok) {
-      throw new Error(` toka HTTP error! Status: ${ringResponse.status}`);
+      throw new Error(` HTTP error! Status: ${ringResponse.status}`);
     }
 
     const ringResult = await ringResponse.json();
@@ -97,12 +102,11 @@ router.get('/info/:token', async function (req, res, next) {
 
 router.get('/OuraData/sleep', function (req, res, next) {
 
-  // make of the felxible model so json that comes from api can be straight saved in mongodb
-
-
   const personalToken = req.session.token;
   dates = functions.DateParser()
-
+  if (!sleepDataDB) {
+    sleepDataDB = functions.makeSchema("sleepdata", req.session.user)
+  }
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${personalToken}`);
   var requestOptions = {
@@ -112,40 +116,102 @@ router.get('/OuraData/sleep', function (req, res, next) {
   fetch(`https://api.ouraring.com/v2/usercollection/daily_sleep?start_date=${dates.monthAgo}&end_date=${dates.today}`, requestOptions)
     .then(response => response.json())
     .then(result => {
-
       if (result.message) {
         res.send({ status: "Data was not found" });
       } else {
         res.send(result)
-
-
         try {
 
-
-          for (let i = 0; i < result.data.length; i++) {
-
-            sleepDataDB.find({ day: result.data[i].day }) // try to find the data we are trying to save
-              .then((data) => {
-
-                if (!data.length) {// if not found we save it to db if data.length == 0 this is true
-                  sleepDataDB.create(result.data[i])
-                }
-              })
-          }
+          functions.addToDb(sleepDataDB, result);
         } catch (error) {
           console.error('Error inserting to db', error)
         }
-
-
       }
-    }
-
-    )
-    .catch(error => console.log('error', error));
+    }).catch(error => console.log('error', error));
 });
 
 
+router.get('/OuraData/activity', function (req, res, next) {
 
+  const personalToken = req.session.token;
+  dates = functions.DateParser()
+  if (!activityDataDB) {
+    activityDataDB = functions.makeSchema("activitydata", req.session.user)
+  }
+  var myHeaders = new Headers();
+  myHeaders.append('Authorization', `Bearer ${personalToken}`);
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+  };
+
+  fetch(`https://api.ouraring.com/v2/usercollection/daily_activity?start_date=${dates.monthAgo}&end_date=${dates.today}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      if (result.message) {
+        res.send({ status: "Data was not found" });
+      } else {
+        res.send(result)
+        try {
+
+          functions.addToDb(activityDataDB, result);
+        } catch (error) {
+          console.error('Error inserting to db', error)
+        }
+      }
+    }).catch(error => console.log('error', error));
+});
+
+
+// function to add readiness to db
+router.get('/OuraData/readiness', function (req, res, next) {
+
+  const personalToken = req.session.token;
+  dates = functions.DateParser()
+  if (!readinessDataDB) {
+    readinessDataDB = functions.makeSchema("readinessdata", req.session.user)
+  }
+  var myHeaders = new Headers();
+  myHeaders.append('Authorization', `Bearer ${personalToken}`);
+  var requestOptions = {
+    method: 'GET',
+    headers: myHeaders,
+  };
+  fetch(`https://api.ouraring.com/v2/usercollection/daily_readiness?start_date=${dates.monthAgo}&end_date=${dates.today}`, requestOptions)
+    .then(response => response.json())
+    .then(result => {
+      if (result.message) {
+        res.send({ status: "Data was not found" });
+      } else {
+        res.send(result)
+        try {
+          functions.addToDb(readinessDataDB, result)
+        } catch (error) {
+          console.error('Error inserting to db', error)
+        }
+      }
+    }).catch(error => console.log('error', error));
+});
+
+
+// code to get selected dates and all the days between them from database
+router.get('/OuraData/sleepscores/:startdate/:enddate', async function (req, res, next) {
+  const startDate = req.params.startdate;
+  const endDate = req.params.enddate;
+
+  if (!sleepDataDB) {
+    res.status(403).send({ status: "no imported data" }); // if user has not logged in or there is no token to identify the user
+    return;
+  }
+  const result = await functions.findFromDB(sleepDataDB, startDate, endDate);
+
+  if (!result.length) { // if nothing with given dates are found
+    res.send({ message: "nothing found" })
+  }
+  else {
+    res.send(result); // send back the result of sleeps found from given range
+  }
+})
 
 
 

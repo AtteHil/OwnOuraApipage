@@ -12,6 +12,12 @@ body {
   /* box shadow for navbar*/
 }
 
+#submit-token {
+  /* Find data button text color*/
+  color: black;
+  border-color: #00ff00;
+}
+
 .navbar .dropdown-menu {
   background-color: #0f8f0f;
   /* Set the background color for the dropdown menu */
@@ -54,4 +60,68 @@ a {
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
   background-color: #0f8f0f;
+}
+
+.nightText {
+  /* setting attributes for night divs and texts in sleep page*/
+  padding: 5px 15px 5px 15px;
+}
+
+.night {
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 0 10px 20px;
+  flex-basis: 30%;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
+  background-color: #0f8f0f;
+}
+
+.sleepinfoBox {
+  padding-top: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+
+/*style for date input*/
+.dateSubmit {
+
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 20px 0 10px 0;
+  border-radius: 15px;
+  box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
+  background-color: #0f8f0f;
+
+}
+
+label {
+  margin: 0 4px 0 3px;
+  font-weight: bold;
+}
+
+#sleepButton {
+  border-radius: 5px;
+  margin-left: 5px;
+  background-color: #0f8f0f;
+  border-color: #00ff00;
+}
+
+#sleepButton:hover {
+  background-color: #309e30;
+}
+
+input {
+  border-radius: 5px;
+  background-color: #0c6e0c;
+}
+
+.inputs {
+  margin-top: 5px;
 }

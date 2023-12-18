@@ -2,7 +2,7 @@ extends layout
 
 block content
   nav.navbar.navbar-expand-lg.navbar-light
-    a.navbar-brand(href='#') OuraApi
+    a.navbar-brand(href='https://github.com/AtteHil/OwnOuraApipage') OuraApi
     button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarSupportedContent', aria-controls='navbarSupportedContent', aria-expanded='false', aria-label='Toggle navigation')
       span.navbar-toggler-icon
 
@@ -11,15 +11,15 @@ block content
         li.nav-item.active
           a.nav-link(href='/') Info
             span.sr-only (current)
-        //- li.nav-item
-        //-   a.nav-link(href='#') Link
+        li.nav-item
+          a.nav-link(href='#') Chart
         li.nav-item.dropdown
           a.nav-link.dropdown-toggle(href='#', id='navbarDropdown', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false') Different data
           .dropdown-menu(aria-labelledby='navbarDropdown')
             a.dropdown-item(href='/sleep') Sleep
-            a.dropdown-item(href='#') Activity
+            a.dropdown-item(href='/activity') Activity
             //- .dropdown-divider
-            a.dropdown-item(href='#') Readyness
+            a.dropdown-item(href='/readiness') Readiness
         
 
       form.form-inline.my-2.my-lg-0
@@ -30,4 +30,5 @@ block content
   div(id= 'infoBoxes')
     div(id='personalInfo' class='infoBox')
     div(id='ringInfo' class='infoBox')
+  script(src="javascripts/front_end_functions.js")
   script(src='/javascripts/main.js')

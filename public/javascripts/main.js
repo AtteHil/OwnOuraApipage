@@ -16,10 +16,11 @@ const fetchApiData = (loggedIn, token = "") => {
         })
         .then(data => {
             if (!data.status) {
-                console.log(data.ringInformation);
                 PersonalInfoDiv(data.information);
                 ringInfoDiv(data.ringInformation);
                 fetchSleepData();
+                fetchActivityData();
+                fetchReadinessData();
             }
 
 
@@ -27,16 +28,16 @@ const fetchApiData = (loggedIn, token = "") => {
 
 
 }
-const pLine = (category, data, unit = "") => {
-    return `<p><span style="color: rgba(4, 241, 36, 0.4); font-weight: bold;" >${category}</span> ${data} ${unit}</p>`
-}
+// const pLine = (category, data, unit = "") => {
+//     return `<p><span style="color: rgba(4, 241, 36, 0.4); font-weight: bold;" >${category}</span> ${data} ${unit}</p>`
+// }
 // Function to build ther information div of the fetched user data
 const PersonalInfoDiv = (data) => {
     const parentDiv = document.getElementById('personalInfo');
     const p = document.createElement('p');
     p.setAttribute("class", "infoText");
     p.innerHTML = `
-    <h1>Ring information</h1>
+    <h1>Your information</h1>
     ${pLine("Age:", data.age, "years")}
     ${pLine("Weight:", data.weight, "kg")}
     ${pLine("Height:", data.height, "m")}
@@ -53,7 +54,7 @@ const ringInfoDiv = (data) => {
     const p = document.createElement('p');
     p.setAttribute("class", "infoText");
     p.innerHTML = `
-    <h1>Your information</h1>
+    <h1>Ring information</h1>
     ${pLine("Color:", data.color)}
     ${pLine("Design:", data.design)}
     ${pLine("Firmware version:", data.firmware_version)}
@@ -64,21 +65,6 @@ const ringInfoDiv = (data) => {
 
 }
 
-// get sleepdata from backend and put it for display to user. moves to sleep.js
-const fetchSleepData = () => {
-    fetch(`/OuraData/sleep`)
-        .then(response => {
-            if (!response.ok) {
-                console.error("There was error while fetching");
-            }
-            return response.json();
-        })
-        .then(data => {
-
-
-
-        })
-}
 
 const onLoad = () => {
     fetch('/user')
