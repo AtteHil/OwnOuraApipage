@@ -26,5 +26,5 @@ const fetchApiData = (loggedIn, token = "") => {
 
 }
 const getSelectedRange = async () => {
-    await getDataforDates('activity', 'activityInfo');
+    await getDataforDates('readiness', 'readinessInfo');
 }

@@ -1,3 +1,5 @@
+
+// functions to get data to database from oura api
 const fetchSleepData = () => {
     fetch(`/OuraData/sleep`)
         .then(response => {
@@ -47,9 +49,9 @@ const readContributors = (contributorsJson) => {
     // console.log(htmlElement);
     return htmlElement
 };
-const showData = (array, divName) => {
+const showData = (array, divName) => { // function to show data from database in divs on different pages(sleep, activity and readiness)
     const parentDiv = document.getElementById(divName);
-
+    parentDiv.innerHTML = "";
     for (let i = 0; i < array.length; i++) {
         const data = array[i][0]
         const element = document.createElement('p');
@@ -68,5 +70,35 @@ const showData = (array, divName) => {
         parentDiv.appendChild(nightbox);
 
 
+    }
+}
+const getDataforDates = async (wantedData, divName) => { // function to get dates and call backend with dates to find from database wanted days scores and show them 
+    const startDateInput = document.getElementById('startDate');
+    const endDateInput = document.getElementById('endDate');
+
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(endDateInput.value);
+    const database = wantedData; // input to know from which database we are finding data from
+    if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) { // check that dates are valid dates 
+
+
+        fetch(`/OuraData/databasedata/${database}/${startDate}/${endDate}`)
+            .then(response => {
+                if (response.status == 403) {
+                    return alert("no token is given")
+                }
+                else if (!response.ok) {
+                    console.error("There was error while fetching");
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data) {
+                    showData(data, divName);
+                }
+
+            })
+    } else {
+        alert('Please select both start and end dates.');
     }
 }

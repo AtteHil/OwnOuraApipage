@@ -24,7 +24,7 @@ router.use(session({
 }));
 
 
-/* GET home page. */
+/* GET different pages */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'OuraApi' });
 });
@@ -34,7 +34,9 @@ router.get('/sleep', function (req, res, next) {
 router.get('/activity', function (req, res, next) {
   res.render('activity', { title: 'OuraApi' });
 });
-
+router.get('/readiness', function (req, res, next) {
+  res.render('readiness', { title: 'OuraApi' });
+});
 
 router.get('/user', function (req, res, next) {
   const personalToken = req.session.token;
@@ -55,7 +57,7 @@ router.get('/info/:token', async function (req, res, next) {
   req.session.token = req.params.token;
   personalToken = req.session.token;
 
-  // console.log(personalToken);
+
   informationJson = {};
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${personalToken}`);
@@ -74,7 +76,7 @@ router.get('/info/:token', async function (req, res, next) {
   } else {
     req.session.user = result.id
     informationJson.information = result;
-    // res.send(result)
+
   }
 
   //get ring information
@@ -100,7 +102,7 @@ router.get('/info/:token', async function (req, res, next) {
   }
 }
 );
-// function to get sleepdata for last nights sleep
+// function to read data from Oura api to database
 
 
 router.get('/OuraData/sleep', function (req, res, next) {
@@ -133,7 +135,7 @@ router.get('/OuraData/sleep', function (req, res, next) {
     }).catch(error => console.log('error', error));
 });
 
-
+// function to get data from Oura api to database
 router.get('/OuraData/activity', function (req, res, next) {
 
   const personalToken = req.session.token;
@@ -166,7 +168,7 @@ router.get('/OuraData/activity', function (req, res, next) {
 });
 
 
-// function to add readiness to db
+// function to add readiness data to database
 router.get('/OuraData/readiness', function (req, res, next) {
 
   const personalToken = req.session.token;
