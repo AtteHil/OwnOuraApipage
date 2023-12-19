@@ -1,4 +1,3 @@
-
 const fetchApiData = (loggedIn, token = "") => {
     if (!loggedIn) {
         token = document.getElementById('PersonalToken').value
@@ -26,11 +25,6 @@ const fetchApiData = (loggedIn, token = "") => {
 
 
 }
-
 const getSelectedRange = async () => {
-    await getDataforDates('sleep', 'sleepInfo');
+    await getDataforDates('readiness', 'readinessInfo');
 }
-
-
-
-

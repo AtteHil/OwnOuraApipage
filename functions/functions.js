@@ -40,7 +40,7 @@ module.exports = {
 
                 if (data.length) { // if data is found we push it to array
                     foundArray.push(data);
-                    console.log("found data for day " + formattedDate);
+
                 }
             } catch (error) {
                 console.error("Error while fetching data:", error);

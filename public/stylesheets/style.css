@@ -1,3 +1,10 @@
+:root {
+  --primary-color: #0c6e0c;
+  --div-background: #535353;
+  --secondary-color: #0f8f0f;
+  --text-color: #00b800;
+}
+
 body {
   padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
@@ -6,7 +13,7 @@ body {
 }
 
 .navbar {
-  background-color: #0f8f0f;
+  background-color: var(--primary-color);
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(4, 241, 36, 0.4);
   /* box shadow for navbar*/
@@ -19,25 +26,23 @@ body {
 }
 
 .navbar .dropdown-menu {
-  background-color: #0f8f0f;
+  background-color: var(--primary-color);
   /* Set the background color for the dropdown menu */
 }
 
 .navbar .dropdown-item:hover {
-  background-color: #0c6e0c !important;
+  background-color: var(--secondary-color) !important;
   /* Set the background color for the dropdown menu */
   border-radius: 10px;
 }
 
 .navbar-nav .nav-link:hover {
-  background-color: #0c6e0c;
+  background-color: var(--secondary-color);
   border-radius: 15px;
   /* Set the background color on hover for the nav links */
 }
 
-a {
-  color: #00B7FF;
-}
+
 
 .infoText {
   padding: 5px 15px 5px 15px;
@@ -53,13 +58,15 @@ a {
   margin-right: 20px;
 }
 
+
+
 .infoBox {
   display: none;
   width: 50%;
 
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
-  background-color: #0f8f0f;
+  background-color: var(--div-background);
 }
 
 .nightText {
@@ -74,8 +81,10 @@ a {
   flex-basis: 30%;
   border-radius: 15px;
   box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
-  background-color: #0f8f0f;
+  background-color: var(--div-background);
 }
+
+
 
 .sleepinfoBox {
   padding-top: 30px;
@@ -96,8 +105,8 @@ a {
   justify-content: center;
   margin: 20px 0 10px 0;
   border-radius: 15px;
-  box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
-  background-color: #0f8f0f;
+  box-shadow: 0 4px 6px var(--secondary-color);
+  background-color: var(--primary-color);
 
 }
 
@@ -109,17 +118,17 @@ label {
 #sleepButton {
   border-radius: 5px;
   margin-left: 5px;
-  background-color: #0f8f0f;
+  background-color: var(--primary-color);
   border-color: #00ff00;
 }
 
 #sleepButton:hover {
-  background-color: #309e30;
+  background-color: var(--secondary-color);
 }
 
 input {
   border-radius: 5px;
-  background-color: #0c6e0c;
+  background-color: var(--primary-color);
 }
 
 .inputs {

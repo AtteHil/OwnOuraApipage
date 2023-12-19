@@ -24,14 +24,19 @@ router.use(session({
 }));
 
 
-/* GET home page. */
+/* GET different pages */
 router.get('/', function (req, res, next) {
   res.render('index', { title: 'OuraApi' });
 });
 router.get('/sleep', function (req, res, next) {
   res.render('sleep', { title: 'OuraApi' });
 });
-
+router.get('/activity', function (req, res, next) {
+  res.render('activity', { title: 'OuraApi' });
+});
+router.get('/readiness', function (req, res, next) {
+  res.render('readiness', { title: 'OuraApi' });
+});
 
 router.get('/user', function (req, res, next) {
   const personalToken = req.session.token;
@@ -52,7 +57,7 @@ router.get('/info/:token', async function (req, res, next) {
   req.session.token = req.params.token;
   personalToken = req.session.token;
 
-  // console.log(personalToken);
+
   informationJson = {};
   var myHeaders = new Headers();
   myHeaders.append('Authorization', `Bearer ${personalToken}`);
@@ -71,7 +76,7 @@ router.get('/info/:token', async function (req, res, next) {
   } else {
     req.session.user = result.id
     informationJson.information = result;
-    // res.send(result)
+
   }
 
   //get ring information
@@ -97,7 +102,7 @@ router.get('/info/:token', async function (req, res, next) {
   }
 }
 );
-// function to get sleepdata for last nights sleep
+// function to read data from Oura api to database
 
 
 router.get('/OuraData/sleep', function (req, res, next) {
@@ -130,7 +135,7 @@ router.get('/OuraData/sleep', function (req, res, next) {
     }).catch(error => console.log('error', error));
 });
 
-
+// function to get data from Oura api to database
 router.get('/OuraData/activity', function (req, res, next) {
 
   const personalToken = req.session.token;
@@ -163,7 +168,7 @@ router.get('/OuraData/activity', function (req, res, next) {
 });
 
 
-// function to add readiness to db
+// function to add readiness data to database
 router.get('/OuraData/readiness', function (req, res, next) {
 
   const personalToken = req.session.token;
@@ -195,15 +200,28 @@ router.get('/OuraData/readiness', function (req, res, next) {
 
 
 // code to get selected dates and all the days between them from database
-router.get('/OuraData/sleepscores/:startdate/:enddate', async function (req, res, next) {
+router.get('/OuraData/databasedata/:database/:startdate/:enddate', async function (req, res, next) {
   const startDate = req.params.startdate;
   const endDate = req.params.enddate;
+  const wantedData = req.params.database;
+  let database;
+  switch (wantedData) {
+    case 'sleep':
+      database = sleepDataDB;
+      break;
+    case 'activity':
+      database = activityDataDB;
+      break;
+    case 'readiness':
+      database = readinessDataDB;
+      break;
+  }
 
-  if (!sleepDataDB) {
+  if (!database) {
     res.status(403).send({ status: "no imported data" }); // if user has not logged in or there is no token to identify the user
     return;
   }
-  const result = await functions.findFromDB(sleepDataDB, startDate, endDate);
+  const result = await functions.findFromDB(database, startDate, endDate);
 
   if (!result.length) { // if nothing with given dates are found
     res.send({ message: "nothing found" })

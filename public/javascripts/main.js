@@ -28,10 +28,8 @@ const fetchApiData = (loggedIn, token = "") => {
 
 
 }
-// const pLine = (category, data, unit = "") => {
-//     return `<p><span style="color: rgba(4, 241, 36, 0.4); font-weight: bold;" >${category}</span> ${data} ${unit}</p>`
-// }
-// Function to build ther information div of the fetched user data
+
+// Function to build information div of the fetched user data
 const PersonalInfoDiv = (data) => {
     const parentDiv = document.getElementById('personalInfo');
     const p = document.createElement('p');
