@@ -31,6 +31,9 @@ router.get('/', function (req, res, next) {
 router.get('/sleep', function (req, res, next) {
   res.render('sleep', { title: 'OuraApi' });
 });
+router.get('/activity', function (req, res, next) {
+  res.render('activity', { title: 'OuraApi' });
+});
 
 
 router.get('/user', function (req, res, next) {
@@ -195,15 +198,28 @@ router.get('/OuraData/readiness', function (req, res, next) {
 
 
 // code to get selected dates and all the days between them from database
-router.get('/OuraData/sleepscores/:startdate/:enddate', async function (req, res, next) {
+router.get('/OuraData/databasedata/:database/:startdate/:enddate', async function (req, res, next) {
   const startDate = req.params.startdate;
   const endDate = req.params.enddate;
+  const wantedData = req.params.database;
+  let database;
+  switch (wantedData) {
+    case 'sleep':
+      database = sleepDataDB;
+      break;
+    case 'activity':
+      database = activityDataDB;
+      break;
+    case 'readiness':
+      database = readinessDataDB;
+      break;
+  }
 
-  if (!sleepDataDB) {
+  if (!database) {
     res.status(403).send({ status: "no imported data" }); // if user has not logged in or there is no token to identify the user
     return;
   }
-  const result = await functions.findFromDB(sleepDataDB, startDate, endDate);
+  const result = await functions.findFromDB(database, startDate, endDate);
 
   if (!result.length) { // if nothing with given dates are found
     res.send({ message: "nothing found" })

@@ -37,5 +37,36 @@ const fetchReadinessData = () => {
         });
 };
 const pLine = (category, data, unit = "") => {
-    return `<p><span style="color: rgba(4, 241, 36, 0.4); font-weight: bold;" >${category}</span> ${data} ${unit}</p>`
+    return `<p><span style="color: #00b800; font-weight: bold;" >${category}</span> ${data} ${unit}</p>`
+}
+const readContributors = (contributorsJson) => {
+    let htmlElement = ``
+    for (i in contributorsJson) {
+        htmlElement = htmlElement + pLine(i, contributorsJson[i]);
+    }
+    // console.log(htmlElement);
+    return htmlElement
+};
+const showData = (array, divName) => {
+    const parentDiv = document.getElementById(divName);
+
+    for (let i = 0; i < array.length; i++) {
+        const data = array[i][0]
+        const element = document.createElement('p');
+        const nightbox = document.createElement("div");
+        nightbox.setAttribute("class", "night");
+        element.setAttribute("class", "nightText");
+        const daySpan = document.createElement("span");
+        daySpan.style.textDecoration = "underline";
+        daySpan.style.textDecorationColor = "#0f8f0f";
+        daySpan.textContent = data.day;
+        element.innerHTML = `
+        <h1>${daySpan.outerHTML}</h1>
+        ${pLine("Score:", data.score)}
+        ${readContributors(data.contributors)}`;
+        nightbox.appendChild(element)
+        parentDiv.appendChild(nightbox);
+
+
+    }
 }
