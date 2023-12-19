@@ -28,7 +28,7 @@ module.exports = {
     findFromDB: async (database, startDate, endDate) => { // function to search from data base on selected days and between
         const currentDate = new Date(startDate);
         endDate = new Date(endDate);
-        let sleeps = [];
+        let foundArray = [];
 
         while (currentDate <= endDate) {
 
@@ -39,7 +39,7 @@ module.exports = {
                 const data = await database.find({ day: formattedDate });
 
                 if (data.length) { // if data is found we push it to array
-                    sleeps.push(data);
+                    foundArray.push(data);
                     console.log("found data for day " + formattedDate);
                 }
             } catch (error) {
@@ -48,6 +48,6 @@ module.exports = {
             currentDate.setDate(currentDate.getDate() + 1);
         }
 
-        return sleeps;
+        return foundArray;
     }
 }
