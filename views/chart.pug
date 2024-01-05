@@ -33,7 +33,8 @@ block content
       input(type="date" id="endDate")
       button(type="button" id="sleepButton" onclick="getSelectedRange()") Find sleep scores
 
-  div()
-    canvas(id="chart")
+  div(class="canvasDiv")
+    canvas(id="chart" height="600" width="800")
+  p(id="chartText")
   script(src="javascripts/front_end_functions.js")
   script(src="javascripts/chart.js")

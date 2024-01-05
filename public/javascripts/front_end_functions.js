@@ -92,7 +92,7 @@ const getDataforDates = async (wantedData, divName= null) => { // function to ge
     
           const data = await response.json();
     
-          if (divName == null) {
+          if (divName == null) { // if called without div name from chart.js we only make keyvalue pairs of the days and scores and return those
             
             const result = convertToKeyValuePair(data)
             // console.log(result);
@@ -108,7 +108,7 @@ const getDataforDates = async (wantedData, divName= null) => { // function to ge
         alert('Please select both start and end dates.');
       }
     };
-const convertToKeyValuePair = (data) =>{
+const convertToKeyValuePair = (data) =>{ // convert data.day and data.score to key value pairs for easier use in the chart.js
     let result = {}
     for( let i in data){
         

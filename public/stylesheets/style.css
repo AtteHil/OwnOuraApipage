@@ -35,14 +35,24 @@ body {
   /* Set the background color for the dropdown menu */
   border-radius: 10px;
 }
+#chartText{ /* title under the chart*/
+  padding-top: 15px;
+  color: var(--text-color);
 
+}
 .navbar-nav .nav-link:hover {
   background-color: var(--secondary-color);
   border-radius: 15px;
   /* Set the background color on hover for the nav links */
 }
 
-
+.canvasDiv{ /*div for the chart canvas*/
+  border-radius: 5px;
+  box-shadow: 0 4px 6px rgba(0, 255, 34, 0.4);
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+}
 
 .infoText {
   padding: 5px 15px 5px 15px;
