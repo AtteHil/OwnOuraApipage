@@ -72,33 +72,47 @@ const showData = (array, divName) => { // function to show data from database in
 
     }
 }
-const getDataforDates = async (wantedData, divName) => { // function to get dates and call backend with dates to find from database wanted days scores and show them 
+const getDataforDates = async (wantedData, divName= null) => { // function to get dates and call backend with dates to find from database wanted days scores and show them 
     const startDateInput = document.getElementById('startDate');
     const endDateInput = document.getElementById('endDate');
 
     const startDate = new Date(startDateInput.value);
     const endDate = new Date(endDateInput.value);
     const database = wantedData; // input to know from which database we are finding data from
-    if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) { // check that dates are valid dates 
-
-
-        fetch(`/OuraData/databasedata/${database}/${startDate}/${endDate}`)
-            .then(response => {
-                if (response.status == 403) {
-                    return alert("no token is given")
-                }
-                else if (!response.ok) {
-                    console.error("There was error while fetching");
-                }
-                return response.json();
-            })
-            .then(data => {
-                if (data) {
-                    showData(data, divName);
-                }
-
-            })
-    } else {
+    if (!isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
+        try {
+          const response = await fetch(`/OuraData/databasedata/${database}/${startDate}/${endDate}`); // fetch the wanted data in given range
+    
+          if (response.status === 403) {
+            window.alert("you need to input token first");
+            throw new Error("No token is given");
+          } else if (!response.ok) {
+            throw new Error("There was an error while fetching");
+          }
+    
+          const data = await response.json();
+    
+          if (divName == null) {
+            
+            const result = convertToKeyValuePair(data)
+            // console.log(result);
+            return result;
+          } else {
+            showData(data, divName);
+          }
+        } catch (error) {
+          console.error("An error occurred:", error.message);
+          
+        }
+      } else {
         alert('Please select both start and end dates.');
+      }
+    };
+const convertToKeyValuePair = (data) =>{
+    let result = {}
+    for( let i in data){
+        
+        result[data[i][0].day] = data[i][0].score;
     }
+    return result;
 }

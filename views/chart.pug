@@ -32,7 +32,8 @@ block content
       label(for='endDate') End date: 
       input(type="date" id="endDate")
       button(type="button" id="sleepButton" onclick="getSelectedRange()") Find sleep scores
-  div(id='sleepInfo' class='sleepinfoBox')
+
+  div()
+    canvas(id="chart")
   script(src="javascripts/front_end_functions.js")
-  script(src="javascripts/sleep.js")
-  
+  script(src="javascripts/chart.js")

@@ -37,6 +37,9 @@ router.get('/activity', function (req, res, next) {
 router.get('/readiness', function (req, res, next) {
   res.render('readiness', { title: 'OuraApi' });
 });
+router.get('/chart', function (req, res, next) {
+  res.render('chart', { title: 'OuraApi' });
+});
 
 router.get('/user', function (req, res, next) {
   const personalToken = req.session.token;

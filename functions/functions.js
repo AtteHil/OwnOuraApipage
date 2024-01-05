@@ -32,7 +32,7 @@ module.exports = {
 
         while (currentDate <= endDate) {
 
-            const formattedDate = currentDate.toISOString().split('T')[0];;
+            const formattedDate = currentDate.toISOString().split('T')[0];
 
 
             try {
